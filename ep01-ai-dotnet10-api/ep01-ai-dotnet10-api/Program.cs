@@ -1,63 +1,62 @@
 ﻿using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics;
 
 // 1. Database Setup & Logging Configuration
 var options = new DbContextOptionsBuilder<AppDbContext>()
     .UseSqlite("Data Source=app.db")
-    .LogTo(Console.WriteLine, LogLevel.Information) // Logs raw SQL queries directly to the console
+    .LogTo(Console.WriteLine, LogLevel.Information) // Logs raw SQL queries directly to console
     .Options;
 
 using var db = new AppDbContext(options);
 await db.Database.EnsureCreatedAsync();
 await SeedDataAsync(db);
 
-Console.WriteLine("\n--- EXECUTING AI-GENERATED LINQ QUERY ---\n");
+Console.WriteLine("\n--- N+1 QUERY DEMO ---\n");
 var stopwatch = Stopwatch.StartNew();
 
 // ------------------------------------------------------------------
-// AI-GENERATED FLOCKED CODE (The N+1 Query)
+// ❌ BAD CODE: N+1 Query
 // ------------------------------------------------------------------
-//Not Optimized
-var customers = await db.Customers.ToListAsync(); // 1 Query to fetch Customers
+var orders = await db.Orders.ToListAsync(); // 1 query for orders
 
-foreach (var customer in customers)
+foreach (var order in orders)
 {
-    // AI creates a separate query inside the loop for EVERY customer!
-    var totalSpent = await db.Orders
-        .Where(o => o.CustomerId == customer.Id)
-        .SumAsync(o => o.TotalAmount);
+    // Triggers a separate query for each order’s customer
+    var customer = await db.Customers
+        .Where(c => c.Id == order.CustomerId)
+        .FirstAsync();
 
-    Console.WriteLine($"Customer: {customer.Name} | Total Spent: ${totalSpent}");
+    Console.WriteLine($"Order {order.Id} by {customer.Name}");
 }
 
 stopwatch.Stop();
-Console.WriteLine($"\n[AI Version Execution Time]: {stopwatch.ElapsedMilliseconds} ms");
-//Optimized below one
+Console.WriteLine($"\n[N+1 Version Execution Time]: {stopwatch.ElapsedMilliseconds} ms");
 
-Console.WriteLine("\n--- EXECUTING SENIOR REFACTORED LINQ QUERY ---\n");
+
+// ------------------------------------------------------------------
+// ✅ FIXED CODE: Eager Loading / Projection
+// ------------------------------------------------------------------
+Console.WriteLine("\n--- OPTIMIZED QUERY DEMO ---\n");
 stopwatch.Restart();
 
-// ------------------------------------------------------------------
-// SENIOR REFACTORED CODE (Single SQL Projection)
-// ------------------------------------------------------------------
-var customerSummaries = await db.Customers
-    .AsNoTracking() // Disables change tracking overhead for read-only query
-    .Select(c => new
+var orderSummaries = await db.Orders
+    .Include(o => o.Customer) // eager load customers in one query
+    .AsNoTracking()
+    .Select(o => new
     {
-        c.Name,
-        TotalSpent = c.Orders.Sum(o => o.TotalAmount) // Evaluated ENTIRELY inside SQL
+        o.Id,
+        CustomerName = o.Customer.Name
     })
     .ToListAsync();
 
-foreach (var summary in customerSummaries)
+foreach (var summary in orderSummaries)
 {
-    Console.WriteLine($"Customer: {summary.Name} | Total Spent: ${summary.TotalSpent}");
+    Console.WriteLine($"Order {summary.Id} by {summary.CustomerName}");
 }
 
 stopwatch.Stop();
-Console.WriteLine($"\n[Senior Version Execution Time]: {stopwatch.ElapsedMilliseconds} ms");
+Console.WriteLine($"\n[Optimized Version Execution Time]: {stopwatch.ElapsedMilliseconds} ms");
 
 // ------------------------------------------------------------------
 // Data Models & DbContext
@@ -78,22 +77,25 @@ public class Customer
 public class Order
 {
     public int Id { get; set; }
-    public decimal TotalAmount { get; set; }
     public int CustomerId { get; set; }
     public Customer Customer { get; set; } = null!;
 }
 
+// ------------------------------------------------------------------
 // Data Seeding Helper
+// ------------------------------------------------------------------
 partial class Program
 {
     static async Task SeedDataAsync(AppDbContext db)
     {
         if (await db.Customers.AnyAsync()) return;
 
-        var customers = Enumerable.Range(1, 100).Select(i => new Customer
+        var customers = Enumerable.Range(1, 50).Select(i => new Customer
         {
             Name = $"Customer {i}",
-            Orders = Enumerable.Range(1, 5).Select(j => new Order { TotalAmount = j * 10.5m }).ToList()
+            Orders = Enumerable.Range(1, 3)
+                .Select(j => new Order { })
+                .ToList()
         }).ToList();
 
         db.Customers.AddRange(customers);
