@@ -1,0 +1,16 @@
+C:\Users\deepa\source\repos\DotNetArchitectureHub\ep03-ai-RAG\bin\Debug\net10.0\ep03-ai-RAG.exe
+C:\Users\deepa\source\repos\DotNetArchitectureHub\ep03-ai-RAG\bin\Debug\net10.0\ep03-ai-RAG.deps.json
+C:\Users\deepa\source\repos\DotNetArchitectureHub\ep03-ai-RAG\bin\Debug\net10.0\ep03-ai-RAG.runtimeconfig.json
+C:\Users\deepa\source\repos\DotNetArchitectureHub\ep03-ai-RAG\bin\Debug\net10.0\ep03-ai-RAG.dll
+C:\Users\deepa\source\repos\DotNetArchitectureHub\ep03-ai-RAG\bin\Debug\net10.0\ep03-ai-RAG.pdb
+C:\Users\deepa\source\repos\DotNetArchitectureHub\ep03-ai-RAG\obj\Debug\net10.0\ep03-ai-RAG.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\deepa\source\repos\DotNetArchitectureHub\ep03-ai-RAG\obj\Debug\net10.0\ep03-ai-RAG.AssemblyInfoInputs.cache
+C:\Users\deepa\source\repos\DotNetArchitectureHub\ep03-ai-RAG\obj\Debug\net10.0\ep03-ai-RAG.AssemblyInfo.cs
+C:\Users\deepa\source\repos\DotNetArchitectureHub\ep03-ai-RAG\obj\Debug\net10.0\ep03-ai-RAG.csproj.CoreCompileInputs.cache
+C:\Users\deepa\source\repos\DotNetArchitectureHub\ep03-ai-RAG\obj\Debug\net10.0\ep03-ai-RAG.sourcelink.json
+C:\Users\deepa\source\repos\DotNetArchitectureHub\ep03-ai-RAG\obj\Debug\net10.0\ep03-ai-RAG.dll
+C:\Users\deepa\source\repos\DotNetArchitectureHub\ep03-ai-RAG\obj\Debug\net10.0\refint\ep03-ai-RAG.dll
+C:\Users\deepa\source\repos\DotNetArchitectureHub\ep03-ai-RAG\obj\Debug\net10.0\ep03-ai-RAG.pdb
+C:\Users\deepa\source\repos\DotNetArchitectureHub\ep03-ai-RAG\obj\Debug\net10.0\ep03-ai-RAG.genruntimeconfig.cache
+C:\Users\deepa\source\repos\DotNetArchitectureHub\ep03-ai-RAG\obj\Debug\net10.0\ref\ep03-ai-RAG.dll
+C:\Users\deepa\source\repos\DotNetArchitectureHub\ep03-ai-RAG\obj\Debug\net10.0\ep03-ai-.28B825E0.Up2Date

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ep03-ai-RAG": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "GEMINI_API_KEY": "Paste your Key of Project Here"
+      }
+    }
+  }
+}
